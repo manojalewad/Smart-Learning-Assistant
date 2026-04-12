@@ -1,0 +1,44 @@
+export const baseurl="http://localhost:8000"
+
+export const api_paths={
+        Auth:{
+            Register:"/api/v1/auth/register",
+            Login:"/api/v1/auth/login",
+            Getprofile:"/api/v1/auth/getprofile",
+            Updateprofile:"/api/v1/auth/updateprofile",
+            Changepassword:"/api/v1/auth/changepassword"
+        },
+        Documents:{
+            Upload:"/api/v1/documents/upload",
+            GetDocuments:"/api/v1/documents/getdocuments",
+            GetDocumentById:(id)=>`/api/v1/documents/${id}`,
+            DeleteDocument:(id)=>`/api/v1/documents/${id}`,
+            UpdateDocument:(id)=>`/api/v1/documents/update/${id}`
+        },
+        Ai:{
+           GenerateFlashcards:"/api/v1/ai/generate-flashcards",
+            GenerateQuize:"/api/v1/ai/generate-quiz",
+            ExplainConcept:"/api/v1/ai/explainconcept",
+            GetChatHistory:"/api/v1/ai/getchathistory",
+            Chat:"/api/v1/ai/chat",
+            GenerateSummary:"/api/v1/ai/generate-summary"
+        },
+        Flashcard:{
+            GetAllFlashcards:"/api/v1/flashcards/getallflashcards",
+            GetFlashcardsForDoc:(id)=>`/api/v1/flashcards/getflashcards/${id}`,
+            DeleteFlashcard:(id)=>`/api/v1/flashcards/${id}`,
+            ReviewFlashcards:(id)=>`/api/v1/flashcards/review/${id}`,
+            StarFlashcard:(id)=>`/api/v1/flashcards/star/${id}`,
+            GetFlashcardSetById:(id)=>`/api/v1/flashcards/${id}`
+        },
+        Quize:{
+            GetAllQuizes:(id)=>`/api/v1/quizess/getallquizes/${id}`,
+            GetQuizeById:(id)=>`/api/v1/quizess/getquizebyid/${id}`,
+            DeleteQuize:(id)=>`/api/v1/quizess/deletequize/${id}`,
+           SubmitQuize:(id)=>`/api/v1/quizess/submitquize/${id}`,
+            GetQuizeResult:(id)=>`/api/v1/quizess/getquizresult/${id}`
+        },
+        Progress:{
+            Dashboard:"/api/v1/progress/dashboard"
+        }
+};
