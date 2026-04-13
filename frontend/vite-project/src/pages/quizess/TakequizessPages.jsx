@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { quizeservices } from '../../services/quizeservices';
 import Spinner from '../../components/common/Spinner';
 import { FileQuestion, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
-import PageHeader from '../../components/common/PageHeader';
+import PageHeader from '../../components/common/Pageheaders';
 function TakequizessPages() {
   const { id: quizeid } = useParams();
   const [quiz, setquiz] = useState(null);

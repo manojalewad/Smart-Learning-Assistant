@@ -3,7 +3,7 @@ import { User, Mail, Lock, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContexts';
 import authservices from '../../services/authserives';
 import toast from 'react-hot-toast';
-import PageHeader from '../../components/common/PageHeader';
+import PageHeader from '../../components/common/Pageheaders';
 
 function ProfilePages() {
   const [email, setemail] = useState("");

@@ -1,6 +1,6 @@
 import React from "react";
 
-const PageHeader = ({ title, subtitle, children }) => {
+const PageHeaders = ({ title, subtitle, children }) => {
   return (
     <div className="mb-8 flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white px-8 py-7 shadow-sm lg:flex-row lg:items-center lg:justify-between">
       {/* Left Section */}
@@ -31,4 +31,4 @@ const PageHeader = ({ title, subtitle, children }) => {
   );
 };
 
-export default PageHeader;
+export default PageHeaders;

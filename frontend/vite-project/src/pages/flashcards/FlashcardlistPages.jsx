@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { flashcardservices } from '../../services/flashcardservices';
 import Spinner from '../../components/common/Spinner';
 import Emptystate from '../../components/common/Emptystate';
-import PageHeader from '../../components/common/PageHeader';
+import PageHeader from '../../components/common/Pageheaders';
 import Flashcardsetcard from './Flashcardsetcard';
 function FlashcardlistPages() {
   const [flashcardset, setflashcardset] = useState([]);

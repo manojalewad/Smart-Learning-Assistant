@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/common/Spinner';
 import Tabs from '../../components/common/Tabs';
-import Pageheader from '../../components/common/PageHeader';
+import Pageheader from '../../components/common/Pageheaders';
 import {Link} from "react-router-dom";
 import {FileX,ExternalLink,ArrowLeft,FileText} from 'lucide-react'
 import Chatinterface from '../../components/chat/Chatinterface';

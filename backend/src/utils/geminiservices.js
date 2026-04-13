@@ -268,11 +268,13 @@ Answer:
 
   } 
   catch (error) {
+  console.error("FULL GEMINI ERROR:", error);
+  console.error("MESSAGE:", error?.message);
+  console.error("STATUS:", error?.status);
+  console.error("DETAILS:", error?.response?.data);
 
-    console.error("Gemini API error:", error);
-    throw new Error("Failed to process chat request");
-
-  }
+  throw error;
+}
 
 };
 
