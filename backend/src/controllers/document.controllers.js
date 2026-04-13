@@ -20,7 +20,7 @@ const uploaddocument=async(req,res,next)=>{
             throw new apierror(400,"Title is required");
         }
         //create url to uploaded file
-        const baseurl=`http://localhost:${process.env.PORT || 8000}`;
+        const baseurl=`https://smart-learning-assistant-3.onrender.com:${process.env.PORT || 8000}`;
         const fileurl=`${baseurl}/uploads/documents/${req.file.filename}`;
         //create document in database
         const document= await Documents.create({
