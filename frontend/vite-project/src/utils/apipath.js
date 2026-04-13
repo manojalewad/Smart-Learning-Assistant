@@ -1,4 +1,4 @@
-export const baseurl="http://localhost:8000"
+export const baseurl="https://smart-learning-assistant-2.onrender.com"
 
 export const api_paths={
         Auth:{
