@@ -1,4 +1,4 @@
-export const baseurl="https://smart-learning-assistant-2.onrender.com"
+export const baseurl="https://smart-learning-assistant-3.onrender.com"
 
 export const api_paths={
         Auth:{
