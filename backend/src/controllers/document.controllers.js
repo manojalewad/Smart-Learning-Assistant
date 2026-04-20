@@ -7,6 +7,7 @@ import { chunkText } from "../utils/textchunker.js";
 import parsepdf from "../utils/pdfParser.js";
 import Flashcards from "../models/flashcard.models.js";
 import Quizes from "../models/quize.models.js";
+import cloudinaryupload from "../utils/cloudnaryupload.js";
 
 const uploaddocument=async(req,res,next)=>{
     try {
@@ -20,8 +21,13 @@ const uploaddocument=async(req,res,next)=>{
             throw new apierror(400,"Title is required");
         }
         //create url to uploaded file
-        const baseurl=`https://smart-learning-assistant-3.onrender.com:${process.env.PORT || 8000}`;
-        const fileurl=`${baseurl}/uploads/documents/${req.file.filename}`;
+        const localpath=req.file.path;
+        const fileup=await cloudinaryupload(localpath);
+        if(!fileup.url){
+        throw new apierror(402,"file url is not available to update");
+        }
+        const fileurl=fileup.url;
+        console.log(fileurl);
         //create document in database
         const document= await Documents.create({
             userid:req.user._id,

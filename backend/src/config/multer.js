@@ -1,42 +1,12 @@
-import multer from "multer";
-import path from "path";
-import fs from "fs";
+import multer from "multer"
 
-const filename=import.meta.filename;
-const dirname=import.meta.dirname;
-
-const uploaddir=path.join(dirname,"../uploads/documents");
-
-if(!fs.existsSync(uploaddir)){
-    fs.mkdirSync(uploaddir,{recursive:true});
-}
-
-//configure multer storage
 const storage=multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,uploaddir);
+    destination:function(req,file,cb){
+        cb(null,"./public/temp")
     },
-    filename:(req,file,cb)=>{
-        const uniqueSuffix=Date.now()+"-"+Math.round(Math.random()*1e9);
-        cb(null,uniqueSuffix+"-"+file.originalname);
+    filename:function(req,file,cb){
+        cb(null,file.originalname)
     }
 })
-
-//apply file filter to accept only pdf files
-const filefilter=(req,file,cb)=>{
-    if(file.mimetype==="application/pdf"){
-        cb(null,true);
-    }else{
-        cb(new Error("Only PDF files are allowed"),false);
-    }
-}
-
-const upload=multer({
-    storage,
-    fileFilter:filefilter,
-    limits:{
-        fileSize:parseInt(process.env.MAX_FILE_SIZE) || 10*1024*1024 //10MB default
-    }
-})
-
+const upload=multer({storage});
 export default upload;
