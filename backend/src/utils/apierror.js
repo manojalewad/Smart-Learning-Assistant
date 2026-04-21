@@ -1,13 +1,29 @@
 class apierror extends Error{
     constructor(
-        stautscode,
+        statusOrMessage,
         message="somethings is wrong",
         error=[],
         statck=""
     ){
-        super(message)
-        this.stautscode=stautscode
-        this.message=message
+        // Support both constructor signatures:
+        // new apierror(401, "Message") and new apierror("Message", 401)
+        let statuscode = 500;
+        let finalMessage = message;
+
+        if (typeof statusOrMessage === "number") {
+            statuscode = statusOrMessage;
+        } else if (typeof statusOrMessage === "string") {
+            finalMessage = statusOrMessage;
+            if (typeof message === "number") {
+                statuscode = message;
+            }
+        }
+
+        super(finalMessage)
+        // Keep both keys for backward compatibility with existing code typos.
+        this.statuscode=statuscode
+        this.stautscode=statuscode
+        this.message=finalMessage
         this.data=null
         this.success=false
         this.error=error

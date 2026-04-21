@@ -7,7 +7,7 @@ const verifytoken = async (req, res, next) => {
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return next(new apierror("Not authorized, no token", 401));
+            return next(new apierror(401, "Not authorized, no token"));
         }
 
         const token = authHeader.split(" ")[1];
@@ -17,7 +17,7 @@ const verifytoken = async (req, res, next) => {
         const user = await Users.findById(decoded.id).select("-password");
 
         if (!user) {
-            return next(new apierror("User not found", 404));
+            return next(new apierror(404, "User not found"));
         }
 
         req.user = user;
