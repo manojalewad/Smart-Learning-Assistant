@@ -23,11 +23,11 @@ const uploaddocument=async(req,res,next)=>{
         //create url to uploaded file
         const localpath=req.file.path;
         const fileup=await cloudinaryupload(localpath);
-        if(!fileup?.url){
+        if(!fileup?.secure_url){
         await fs.unlink(localpath).catch(()=>{});
         throw new apierror(402,"file url is not available to update");
         }
-        const fileurl=fileup.url;
+        const fileurl=fileup.secure_url;
         console.log(fileurl);
         //create document in database
         const document= await Documents.create({
