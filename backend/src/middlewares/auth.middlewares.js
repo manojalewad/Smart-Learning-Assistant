@@ -11,8 +11,12 @@ const verifytoken = async (req, res, next) => {
         }
 
         const token = authHeader.split(" ")[1];
+        console.log("TOKEN:", token);
+        console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+
 
         const user = await Users.findById(decoded.id).select("-password");
 
@@ -24,6 +28,8 @@ const verifytoken = async (req, res, next) => {
         next();
     } catch (error) {
         console.log("VERIFY TOKEN ERROR:", error);
+        console.log(error.name);
+        console.log(error.message);
 
         if (error.name === "TokenExpiredError") {
             return next(new apierror("Token expired", 401));
