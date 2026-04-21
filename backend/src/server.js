@@ -19,15 +19,12 @@ const app=express();
 connectDB();
 
 //configure the cors middleware to allow requests from the frontend
-app.use(cors(
-    {
-        origin:"*",
-        credentials:true,
-        methods:["GET","POST","PUT","DELETE"],
-        allowedHeaders:["Content-Type","Authorization"]
-    }
-))
-
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 //due to this we can access the req.body data
 app.use(express.json());
 
