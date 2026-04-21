@@ -17,13 +17,14 @@ const uploaddocument=async(req,res,next)=>{
         //if file is uploaded check for title
         const {title}=req.body;
         if(!title){
-            fs.unlink(req.file.path);
+            await fs.unlink(req.file.path).catch(()=>{});
             throw new apierror(400,"Title is required");
         }
         //create url to uploaded file
         const localpath=req.file.path;
         const fileup=await cloudinaryupload(localpath);
-        if(!fileup.url){
+        if(!fileup?.url){
+        await fs.unlink(localpath).catch(()=>{});
         throw new apierror(402,"file url is not available to update");
         }
         const fileurl=fileup.url;
@@ -44,7 +45,10 @@ const uploaddocument=async(req,res,next)=>{
             new apiresponse(200,"Document uploaded successfully",document)
         )
     } catch (error) {
-        throw new apierror(400,"Error while uploading document");
+        if(req.file?.path){
+            await fs.unlink(req.file.path).catch(()=>{});
+        }
+        return next(error);
     }
 }
 
@@ -65,6 +69,8 @@ const processpdf=async(documentid,filepath)=>{
         await Documents.findByIdAndUpdate(documentid,{
             status:"failed"
         })
+    } finally {
+        await fs.unlink(filepath).catch(()=>{});
     }
 }
 

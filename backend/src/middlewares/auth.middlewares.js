@@ -4,13 +4,20 @@ import { apierror } from "../utils/apierror.js";
 
 const verifytoken = async (req, res, next) => {
     try {
-        const authHeader = req.headers.authorization;
+        const authHeader = req.get("authorization");
+        let token = null;
 
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return next(new apierror(401, "Not authorized, no token"));
+        if (authHeader && /^Bearer\s+/i.test(authHeader)) {
+            token = authHeader.replace(/^Bearer\s+/i, "").trim();
+        } else if (req.headers["x-access-token"]) {
+            token = String(req.headers["x-access-token"]).trim();
+        } else if (req.headers.token) {
+            token = String(req.headers.token).trim();
         }
 
-        const token = authHeader.split(" ")[1];
+        if (!token) {
+            return next(new apierror(401, "Not authorized, no token"));
+        }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
