@@ -20,9 +20,9 @@ connectDB();
 
 //configure the cors middleware to allow requests from the frontend
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://smart-learning-assistant-l8ny.vercel.app",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 //due to this we can access the req.body data
