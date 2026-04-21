@@ -19,6 +19,7 @@ const verifytoken = async (req, res, next) => {
 
 
         const user = await Users.findById(decoded.id).select("-password");
+        console.log("USER:", user);
 
         if (!user) {
             return next(new apierror("User not found", 404));
