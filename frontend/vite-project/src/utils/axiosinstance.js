@@ -16,7 +16,26 @@ const axiosinstance=axios.create({
 //request interceptor
 axiosinstance.interceptors.request.use((config)=>{
     const token=localStorage.getItem("token")
-    if(token) config.headers.Authorization=`Bearer ${token}`
+    if(token){
+        const bearerToken = `Bearer ${token.trim()}`
+        if(!config.headers){
+            config.headers={}
+        }
+        if(typeof config.headers.set === "function"){
+            config.headers.set("Authorization", bearerToken)
+        }else{
+            config.headers.Authorization=bearerToken
+        }
+    }
+
+    // Let browser set multipart boundary automatically.
+    if(config.data instanceof FormData && config.headers){
+        if(typeof config.headers.delete === "function"){
+            config.headers.delete("Content-Type")
+        }else{
+            delete config.headers["Content-Type"]
+        }
+    }
     return config
 },(error)=>{
     return Promise.reject(error)

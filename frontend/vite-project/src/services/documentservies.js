@@ -3,9 +3,10 @@ import axiosinstance from "../utils/axiosinstance";
 
 const uploaddocument=async(formdata)=>{
     try {
+        const token = localStorage.getItem("token");
         const response=await axiosinstance.post(api_paths.Documents.Upload,formdata,{
             headers:{
-                "Content-Type":"multipart/form-data"
+                ...(token ? { Authorization: `Bearer ${token.trim()}` } : {})
             }
         });
         return response.data;
