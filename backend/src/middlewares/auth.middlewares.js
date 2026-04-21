@@ -11,36 +11,19 @@ const verifytoken = async (req, res, next) => {
         }
 
         const token = authHeader.split(" ")[1];
-        console.log("TOKEN:", token);
-        console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
-
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const user = await Users.findById(decoded.id).select("-password");
-        console.log("USER:", user);
 
         if (!user) {
             return next(new apierror("User not found", 404));
         }
 
         req.user = user;
-        next();
+        return next();
     } catch (error) {
-        console.log("VERIFY TOKEN ERROR:", error);
-        console.log(error.name);
-        console.log(error.message);
-
-        if (error.name === "TokenExpiredError") {
-            return next(new apierror("Token expired", 401));
-        }
-
-        if (error.name === "JsonWebTokenError") {
-            return next(new apierror("Invalid token", 401));
-        }
-
-        next(error);
+        return next(error);
     }
 };
 export default verifytoken;
