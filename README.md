@@ -1,6 +1,6 @@
 
 
-````markdown
+
 # 📚 Smart Learning Assistant
 
 ### An AI-powered learning platform that transforms study PDFs into interactive learning experiences.
