@@ -1,5 +1,6 @@
 
 
+````markdown
 # 📚 Smart Learning Assistant
 
 ### An AI-powered learning platform that transforms study PDFs into interactive learning experiences.
@@ -35,7 +36,7 @@ Instead of manually reading a PDF, preparing notes, creating flashcards, and mak
 
 ### Core Workflow
 
-`
+```text
                     📄 Upload PDF
                          │
                          ▼
@@ -56,9 +57,9 @@ Instead of manually reading a PDF, preparing notes, creating flashcards, and mak
                               └───────┬───────┘
                                       ▼
                               📊 Track Progress
+````
 
-
--
+---
 
 ## ✨ Features
 
@@ -95,7 +96,7 @@ Ask questions directly about your uploaded study material.
 
 The application retrieves relevant sections from the document and provides them to Google Gemini as context before generating the response.
 
-`
+```text
 User Question
       ↓
 Query Processing
@@ -107,7 +108,7 @@ Top Relevant Chunks
 Google Gemini
       ↓
 Context-Aware Answer
-``
+```
 
 ### 🃏 Flashcards
 
@@ -133,12 +134,13 @@ Context-Aware Answer
 * Average quiz score
 * Recent learning activity
 
-
+---
 
 ## 🧠 AI & RAG
 
 The document chat feature uses a lightweight **Retrieval-Augmented Generation (RAG)** approach.
 
+```text
 PDF
  ↓
 Text Extraction
@@ -152,7 +154,7 @@ Relevant Chunks
 Google Gemini
  ↓
 Context-Aware Response
-
+```
 
 Documents are divided into overlapping chunks of approximately **500 words with 50 words of overlap**.
 
@@ -160,11 +162,11 @@ When a user asks a question, the application scores document chunks based on key
 
 > **Note:** The current implementation uses keyword-based retrieval rather than embeddings or a vector database.
 
-
+---
 
 ## 🏗️ Architecture
 
-
+```text
 ┌───────────────────────┐
 │    React Frontend     │
 │                       │
@@ -193,7 +195,9 @@ When a user asks a question, the application scores document chunks based on key
    │Mongoose│ │ Gemini       │
    └────────┘ │ Cloudinary   │
               └──────────────┘
+```
 
+---
 
 ## 🛠️ Tech Stack
 
@@ -228,6 +232,7 @@ When a user asks a question, the application scores document chunks based on key
 
 ## 📁 Project Structure
 
+```text
 Smart-Learning-Assistant/
 │
 ├── backend/
@@ -251,7 +256,9 @@ Smart-Learning-Assistant/
 │           └── utils/
 │
 └── README.md
+```
 
+---
 
 ## 🔄 How It Works
 
@@ -259,7 +266,7 @@ Smart-Learning-Assistant/
 
 The user uploads a PDF from the React frontend.
 
-
+```text
 React
  ↓
 FormData
@@ -269,7 +276,7 @@ Axios
 Express
  ↓
 Multer
-
+```
 
 ### 2. Store
 
@@ -283,11 +290,11 @@ The PDF is uploaded to Cloudinary and document metadata is stored in MongoDB.
 
 The extracted text is divided into overlapping chunks.
 
-
+```text
 500 words
 +
 50 words overlap
-
+```
 
 ### 5. Generate
 
@@ -303,10 +310,11 @@ Google Gemini is used to generate:
 
 Learning resources and activity are stored in MongoDB and displayed through the dashboard.
 
+---
 
 ## 🔑 Authentication Flow
 
-
+```text
 Register / Login
       ↓
 Verify Credentials
@@ -322,11 +330,11 @@ Authorization: Bearer <token>
 Authentication Middleware
       ↓
 Protected Controller
-
+```
 
 Passwords are hashed using **bcrypt** before being stored.
 
-
+---
 
 ## 🗄️ Database
 
@@ -334,7 +342,7 @@ The application uses **MongoDB with Mongoose**.
 
 ### Main Models
 
-
+```text
 User
  ├── username
  ├── email
@@ -365,9 +373,70 @@ ChatHistory
  ├── user
  ├── document
  └── messages[]
+```
 
+---
 
+## 🔌 API Overview
 
+### Authentication
+
+```http
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+GET  /api/v1/auth/getprofile
+POST /api/v1/auth/updateprofile
+PUT  /api/v1/auth/changepassword
+```
+
+### Documents
+
+```http
+POST   /api/v1/documents/upload
+GET    /api/v1/documents/getdocuments
+GET    /api/v1/documents/:id
+POST   /api/v1/documents/update/:id
+DELETE /api/v1/documents/:id
+```
+
+### AI
+
+```http
+POST /api/v1/ai/chat
+POST /api/v1/ai/generate-summary
+POST /api/v1/ai/generate-flashcards
+POST /api/v1/ai/generate-quiz
+POST /api/v1/ai/explainconcept
+POST /api/v1/ai/getchathistory
+```
+
+### Flashcards
+
+```http
+GET    /api/v1/flashcards/getallflashcards
+GET    /api/v1/flashcards/getflashcards/:id
+POST   /api/v1/flashcards/review/:id
+PUT    /api/v1/flashcards/star/:id
+DELETE /api/v1/flashcards/:id
+```
+
+### Quizzes
+
+```http
+GET    /api/v1/quizess/getallquizes/:id
+GET    /api/v1/quizess/getquizebyid/:id
+POST   /api/v1/quizess/submitquize/:id
+GET    /api/v1/quizess/getquizresult/:id
+DELETE /api/v1/quizess/deletequize/:id
+```
+
+### Progress
+
+```http
+GET /api/v1/progress/dashboard
+```
+
+---
 
 ## ⚙️ Installation
 
