@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r dotenv/config src/server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "create:vector-index": "node scripts/createVectorIndex.js",
+    "backfill:embeddings": "node scripts/backfillEmbeddings.js"
   },
   "keywords": [],
   "author": "",

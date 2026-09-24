@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 import { apierror } from "../utils/apierror.js";
 import fs from "fs/promises";
 import Documents from "../models/document.model.js";
+import DocumentChunks from "../models/documentchunk.model.js";
 import { apiresponse } from "../utils/apiresponse.js";
 import { chunkText } from "../utils/textchunker.js";
 import parsepdf from "../utils/pdfParser.js";
 import Flashcards from "../models/flashcard.models.js";
 import Quizes from "../models/quize.models.js";
 import cloudinaryupload from "../utils/cloudnaryupload.js";
+import { generateDocumentEmbeddings } from "../utils/geminiservices.js";
 
 const uploaddocument=async(req,res,next)=>{
     try {
@@ -58,8 +60,34 @@ const processpdf=async(documentid,filepath)=>{
         
         const text=await parsepdf(filepath);
         console.log("Extracted text:", text);
-        const chunks=chunkText(text.text,500,50);
-        const currdocument=await Documents.findByIdAndUpdate(documentid,{
+        const chunks = chunkText(text.text, 500, 50);
+        const currentDocument = await Documents.findById(documentid);
+        if (!currentDocument) throw new Error("Document not found while processing PDF");
+
+        // Generate semantic embeddings once when the PDF is processed.
+        const embeddings = await generateDocumentEmbeddings(
+            chunks.map(chunk => chunk.content)
+        );
+
+        if (embeddings.length !== chunks.length) {
+            throw new Error("Embedding count does not match chunk count");
+        }
+
+        const chunkDocuments = chunks.map((chunk, index) => ({
+            documentid,
+            userid: currentDocument.userid,
+            content: chunk.content,
+            pagenumber: chunk.pageNumber || 0,
+            chunkindex: chunk.chunkindex,
+            embedding: embeddings[index]
+        }));
+
+        await DocumentChunks.deleteMany({ documentid });
+        if (chunkDocuments.length > 0) {
+            await DocumentChunks.insertMany(chunkDocuments);
+        }
+
+        await Documents.findByIdAndUpdate(documentid,{
             extractedtext:text.text,
             status:"ready",
             chunks:chunks
@@ -166,7 +194,8 @@ const deletedocument=async(req,res,next)=>{
         }
         //delete file from system
         await fs.unlink(document.filepath).catch(()=>{})
-        //delete file from database
+        //delete vector chunks and document from database
+        await DocumentChunks.deleteMany({ documentid });
         await document.deleteOne();
         res.status(200).json(
             new apiresponse(200,"Document deleted sucessfully")

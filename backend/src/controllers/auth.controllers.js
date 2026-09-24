@@ -38,7 +38,7 @@ const register=async(req,res,next)=>{
                 username:newuser.username,
                 email:newuser.email,
                 profilepicture:newuser.profilepicture,
-                createdat:newuser.createdat,
+                createdat:newuser.createdAt,
             },
             token,
             message:"User created successfully"

@@ -3,7 +3,7 @@ import Documents from "../models/document.model.js";
 import Flashcards from "../models/flashcard.models.js";
 import Quizes from "../models/quize.models.js";
 import { chatWithContext, explainConcept, generateFlashcards, generateQuiz } from "../utils/geminiservices.js";
-import { findRelevantChunks } from "../utils/textchunker.js";
+import { findRelevantChunksByVector } from "../utils/vectorsearch.js";
 import { generateSummary } from "../utils/geminiservices.js";
 import { apiresponse } from "../utils/apiresponse.js";
 import { apierror } from "../utils/apierror.js";
@@ -97,7 +97,12 @@ const chat=async(req,res,next)=>{
         }
       //find relevant chunk
     //   console.log(document.chunks);
-      const chunk=await findRelevantChunks(document.chunks,question,3);
+      const chunk=await findRelevantChunksByVector({
+        documentid,
+        userid:req.user._id,
+        query:question,
+        limit:5
+      });
     //   console.log(chunk)
       const chunkindexes=chunk.map(c=>c.chunkindex);
       //find or create chat history
@@ -156,7 +161,12 @@ const explainconcept=async(req,res,next)=>{
      }
  
      //find revelant chunk
-     const relchunk=await findRelevantChunks(document.chunks,concept,3);
+     const relchunk=await findRelevantChunksByVector({
+         documentid,
+         userid:req.user._id,
+         query:concept,
+         limit:5
+     });
      const context=relchunk.map(c=>c.content).join("\n\n");
      const response=await explainConcept(concept,context);
      res.status(200).json(

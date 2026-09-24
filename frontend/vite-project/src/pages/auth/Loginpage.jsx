@@ -17,7 +17,7 @@ function Loginpage() {
   const {login}=useAuth();
 
   const handlesubmit=async(e)=>{
-    e.preventDefault();
+    e.preventDefault();//help to prevent the page navigation/reload
     setloading(true);
     seterror('');
     try {

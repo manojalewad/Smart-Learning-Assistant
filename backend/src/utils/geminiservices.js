@@ -15,6 +15,49 @@ if (!process.env.GEMINI_API_KEY) {
   process.exit(1);
 }
 
+
+/**
+ * Generate embeddings for document chunks using Gemini Embedding 001.
+ * Documents use RETRIEVAL_DOCUMENT so they can be searched with a
+ * RETRIEVAL_QUERY / QUESTION_ANSWERING embedding at query time.
+ */
+export const generateDocumentEmbeddings = async (texts) => {
+  if (!Array.isArray(texts) || texts.length === 0) return [];
+
+  const embeddings = [];
+  const batchSize = 50;
+
+  for (let i = 0; i < texts.length; i += batchSize) {
+    const batch = texts.slice(i, i + batchSize);
+    const response = await ai.models.embedContent({
+      model: "gemini-embedding-001",
+      contents: batch,
+      config: {
+        taskType: "RETRIEVAL_DOCUMENT",
+        outputDimensionality: 768
+      }
+    });
+
+    embeddings.push(...response.embeddings.map((embedding) => embedding.values));
+  }
+
+  return embeddings;
+};
+
+/** Generate an embedding for a user question used for document retrieval. */
+export const generateQueryEmbedding = async (query) => {
+  const response = await ai.models.embedContent({
+    model: "gemini-embedding-001",
+    contents: query,
+    config: {
+      taskType: "QUESTION_ANSWERING",
+      outputDimensionality: 768
+    }
+  });
+
+  return response.embeddings[0].values;
+};
+
 /**
  * Generate flashcards from text
  * @param {string} text - Document text
